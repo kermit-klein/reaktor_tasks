@@ -10,3 +10,21 @@ const neigh = [
   [-1, 0],
   [1, 0],
 ];
+
+let neurons = {};
+
+data.forEach((route) => {
+  let [x, y, ...steps] = route.split(/,| /);
+  x = +x;
+  y = +y;
+  neurons[x + ":" + y] = {};
+  steps.forEach((dir) => {
+    if (dir in incX) {
+      x += incX[dir];
+      y += incY[dir];
+      neurons[x + ":" + y] = {};
+    } else {
+      neurons[x + ":" + y].type = dir;
+    }
+  });
+});
