@@ -28,3 +28,26 @@ data.forEach((route) => {
     }
   });
 });
+
+let nodes = Object.keys(neurons).filter((pos) => neurons[pos].type === "S");
+let dist = 0;
+
+while (nodes.length) {
+  let nextNodes = new Set();
+  nodes.forEach((pos) => {
+    neurons[pos].dist = dist;
+    let [x, y] = pos.split(":").map(Number);
+    neigh.forEach(([incX, incY]) => {
+      let pos = x + incX + ":" + (y + incY);
+      if (
+        pos in neurons &&
+        neurons[pos].type !== "X" &&
+        !("dist" in neurons[pos])
+      ) {
+        nextNodes.add(pos);
+      }
+    });
+  });
+  nodes = [...nextNodes];
+  dist++;
+}
