@@ -51,3 +51,20 @@ while (nodes.length) {
   nodes = [...nextNodes];
   dist++;
 }
+
+let pos = Object.keys(neurons)
+  .filter((pos) => "dist" in neurons[pos] && neurons[pos].type === "F")
+  .sort((a, b) => neurons[a].dist - neurons[b].dist)[0];
+let route = new Array(neurons[pos].dist);
+while (neurons[pos].type !== "S") {
+  let [x, y] = pos.split(":").map(Number);
+  dist = neurons[pos].dist - 1;
+  dir = neigh.findIndex(([incX, incY]) => {
+    let pos = x - incX + ":" + (y - incY);
+    return pos in neurons && neurons[pos].dist === dist;
+  });
+  route[dist] = "UDLR".charAt(dir);
+  pos = x - neigh[dir][0] + ":" + (y - neigh[dir][1]);
+}
+
+console.log(route.join(""));
